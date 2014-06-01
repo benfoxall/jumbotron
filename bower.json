@@ -1,0 +1,20 @@
+{
+  "name": "jumbotron",
+  "version": "0.0.0",
+  "homepage": "https://github.com/benfoxall/jumbotron",
+  "authors": [
+    "Ben Foxall <benfoxall@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "sylvester": "~0.1.3"
+  }
+}
