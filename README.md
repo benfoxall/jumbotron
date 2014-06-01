@@ -3,6 +3,7 @@
 ## libraries
 
 * https://github.com/jcmellado/js-aruco
+* http://sylvester.jcoglan.com/
 
 (not used, but could be useful)
 
