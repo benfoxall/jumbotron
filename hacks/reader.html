@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  <canvas id="canvas" width="500" height="676" ></canvas>
+  <div id="outputDiv" style="white-space:pre"></div>
+
+  <script type="text/javascript" src="../lib/js-aruco/cv.js"></script>
+  <script type="text/javascript" src="../lib/js-aruco/svd.js"></script>
+  <script type="text/javascript" src="../lib/js-aruco/aruco.js"></script>
+  
+  <script type="text/javascript">
+    /* handy getter for image data, might be useful for tests
+    function fileImageData(url, width, height, callback){
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      var imageObj = new Image();
+
+      canvas.width = width;
+      canvas.height = height;
+
+      imageObj.onload = function() {
+        context.drawImage(imageObj, 0, 0);
+        callback(context.getImageData(0,0,width,height));
+      };
+
+    }
+    */
+
+    var context = canvas.getContext('2d');
+    var imageObj = new Image(), data;
+
+    imageObj.onload = function() {
+      context.drawImage(imageObj, 0, 0);
+
+      // setTimeout(function())
+      data=context.getImageData(0,0,500,676);
+
+      var detector = new AR.Detector();
+
+      var output = detector.detect(data);
+
+      console.log(output)
+
+      outputDiv.innerHTML = JSON.stringify(output);//, null, 2);
+
+      context.strokeStyle = 'red';
+      context.lineWidth = 2;
+      output.forEach(function(item){
+        context.beginPath()
+        context.moveTo(item.corners[0].x,item.corners[0].y);
+        context.lineTo(item.corners[1].x,item.corners[1].y);
+        context.lineTo(item.corners[2].x,item.corners[2].y);
+        context.lineTo(item.corners[3].x,item.corners[3].y);
+        context.lineTo(item.corners[0].x,item.corners[0].y);
+        context.stroke();
+      })
+    };
+    imageObj.src = '../test/assets/a.jpg'; //b,c,d will work
+  </script>
+</body>
+</html>
