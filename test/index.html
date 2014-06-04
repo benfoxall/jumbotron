@@ -9,9 +9,12 @@
   <body>
     <div id="mocha"></div>
     <script src="mocha.js"></script>
+    <script src="should.js"></script>
     <script>mocha.setup('bdd')</script>
 
     <script src="../src/jumbotron.js"></script>
+
+    <script src="fixtures.js"></script>
     <script src="tests.js"></script>
     <script>
       mocha.run();

@@ -1,12 +1,12 @@
 describe('.observe', function(){
 
 	before(function(){
-		jumbotron.observe()
+		jumbotron.observe(detections.a)
 	})
 
-	it('called the detect with the imageData')
-	it('stored the response of detect in .observations')
-
+	it('stored the response of detect in .observations', function(){
+		jumbotron.observations.should.containEql(detections.a)
+	})
 
 })
 
