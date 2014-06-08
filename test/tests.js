@@ -40,31 +40,37 @@ describe('recognition', function(){
 describe('utils', function(){
 
 	describe('mapToUnit', function(){
-		var transform,
-			corners = detections.a[0].corners,
-			cornerVs = corners.map(function(c){return $V([c.x,c.y,1])});
+		var corners = detections.a[0].corners,
+			transform,   // the matrix transform that will be generated
+			transformed; // the corners transformed by the matrix
 
 		before(function(){
-			transform = jumbotron.util.mapToUnit(corners)
+			transform = jumbotron.util.mapToUnit(corners);
+
+			// use the computed tranform matrix to re-transform the corners
+			transformed = corners.map(function(corner){
+				var vector = $V([corner.x,corner.y,1]);
+				return transform.x(vector)
+			})
 		});
 
 		it('returned a matrix', function(){
 			transform.should.be.an.instanceOf(Matrix);
 		})
 		it('maps corner 0 to 0,0', function(){
-			match_point(transform.x(cornerVs[0]), [0,0], .5)
+			match_point(transformed[0], [0,0], .5)
 		})
 
 		it('maps corner 1 to 1,0', function(){
-			match_point(transform.x(cornerVs[1]), [1,0], .5)
+			match_point(transformed[1], [1,0], .5)
 		})
 
 		it('maps corner 2 to 1,1', function(){
-			match_point(transform.x(cornerVs[2]), [1,1], .5)
+			match_point(transformed[2], [1,1], .5)
 		})
 
 		it('maps corner 3 to 0,1', function(){
-			match_point(transform.x(cornerVs[3]), [0,1], .5)
+			match_point(transformed[3], [0,1], .5)
 		})
 
 	})
