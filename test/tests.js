@@ -57,19 +57,19 @@ describe('utils', function(){
 			transform.should.be.an.instanceOf(Matrix);
 		})
 		it('maps corner 0 to 0,0', function(){
-			match_point(transformed[0], [0,0], .5)
+			match_point(transformed[0], [0,0], .1)
 		})
 
 		it('maps corner 1 to 1,0', function(){
-			match_point(transformed[1], [1,0], .5)
+			match_point(transformed[1], [1,0], .1)
 		})
 
 		it('maps corner 2 to 1,1', function(){
-			match_point(transformed[2], [1,1], .5)
+			match_point(transformed[2], [1,1], .1)
 		})
 
 		it('maps corner 3 to 0,1', function(){
-			match_point(transformed[3], [0,1], .5)
+			match_point(transformed[3], [0,1], .1)
 		})
 
 	})
