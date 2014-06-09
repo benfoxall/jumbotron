@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>transform debug</title>
+
+    <script src="../src/jumbotron.js"></script>
+    <script src="../lib/sylvester/sylvester.js"></script>
+
+    <script src="../test/fixtures.js"></script>
+</head>
+<body>
+	<h1>transform debug</h1>
+	<canvas id="c" width="300" height="300"></canvas>
+
+	<script type="text/javascript">
+		var ctx = c.getContext('2d');
+
+		ctx.translate(100,100);
+		ctx.scale(100,100);
+
+		// draw guide
+		ctx.fillStyle = 'rgba(255,0,0,0.4)';
+		draw([0,0],[1,0],[1,1],[0,1])
+
+
+		var corners = detections.a[2].corners,
+			transform,   // the matrix transform that will be generated
+			transformed; // the corners transformed by the matrix
+
+		transform = jumbotron.util.mapToUnit(corners);
+		// use the computed tranform matrix to re-transform the corners
+		transformed = corners.map(function(corner){
+			var vector = $V([corner.x,corner.y,1]);
+			return transform.x(vector).elements.slice(0,2)
+		});
+
+
+
+
+		ctx.fillStyle = 'rgba(0,0,255,0.4)';
+		draw.apply(this,transformed)
+
+		function draw(p1,p2,p3,p4){
+			ctx.beginPath();
+			ctx.moveTo(p1[0],p1[1])
+			ctx.lineTo(p2[0],p2[1])
+			ctx.lineTo(p3[0],p3[1])
+			ctx.lineTo(p4[0],p4[1])
+			ctx.lineTo(p1[0],p1[1])
+			ctx.closePath()
+			ctx.fill();
+		}
+	</script>
+
+</body>
+</html>
