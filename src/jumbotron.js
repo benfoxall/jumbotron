@@ -14,23 +14,28 @@ jumbotron.util.mapToUnit = function(corners) {
 	// find a transform that will convert corners to
 	// 0,0 - 1,0 - 1,1 - 0,1
 
-	// simple transforms only
-	var scale = corners[1].x - corners[0].x;
-	var xoff = corners[0].x;
-	var yoff = corners[0].y;
+	// translate, scale & rotate based on first two points
+	var xoff = corners[0].x,
+		yoff = corners[0].y,
+		xdiff = corners[1].x - corners[0].x,
+		ydiff = corners[1].y - corners[0].y, //opp
+		width = Math.sqrt((xdiff*xdiff) + (ydiff*ydiff));
 
-	m= $M([
-		[1/scale, 0,     -xoff/scale],
-		[0,     1/scale, -yoff/scale],
+	// what angle we turn it by to line up the first two points
+	var angle = -Math.atan2(ydiff, xdiff);
+
+
+	var s = $M([
+		[1/width, 0,     0],
+		[0,     1/width, 0],
 		[0,     0,     1]])
+	
+	var t = $M([
+		[1, 0,     -xoff],
+		[0,     1, -yoff],
+		[0,     0,     1]])
+	
+	var r = Matrix.RotationZ(angle);
 
-	return m;
-
-
-	// manual to match test value
-	// return $M([
-	// 	[1/100, 0,     0],
-	// 	[0,     1/100, -1.5],
-	// 	[0,     0,     1]])
-
+	return s.x(r.x(t));
 }
