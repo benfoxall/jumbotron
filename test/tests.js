@@ -40,18 +40,17 @@ describe('recognition', function(){
 describe('utils', function(){
 
 	describe('mapToUnit', function(){
-		var corners = detections.a[0].corners,
+		var corners = detections.a[2].corners,
 			transform,   // the matrix transform that will be generated
 			transformed; // the corners transformed by the matrix
 
 		before(function(){
 			transform = jumbotron.util.mapToUnit(corners);
-
 			// use the computed tranform matrix to re-transform the corners
 			transformed = corners.map(function(corner){
 				var vector = $V([corner.x,corner.y,1]);
 				return transform.x(vector)
-			})
+			});
 		});
 
 		it('returned a matrix', function(){
@@ -79,6 +78,12 @@ describe('utils', function(){
 
 
 function match_point(vector, array, accuracy){
-	vector.elements[0].should.be.approximately(array[0],accuracy)
-	vector.elements[1].should.be.approximately(array[1],accuracy)
+	try{
+		vector.elements[0].should.be.approximately(array[0],accuracy)
+		vector.elements[1].should.be.approximately(array[1],accuracy)	
+	} catch (e){
+		throw new Error("expected " + vector.inspect() +
+				 " to be [" + array.join(',') + '] ' + 
+				 '(± ' + accuracy + ')')
+	}
 }
