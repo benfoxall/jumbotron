@@ -57,15 +57,14 @@ describe('utils', function(){
 	})
 
 	describe('mapToUnit', function(){
-		var corners = detections.a[2].corners,
+		var corners = jumbotron.util.vectors(detections.a[2]),
 			transform,   // the matrix transform that will be generated
 			transformed; // the corners transformed by the matrix
 
 		before(function(){
 			transform = jumbotron.util.mapToUnit(corners);
 			// use the computed tranform matrix to re-transform the corners
-			transformed = corners.map(function(corner){
-				var vector = $V([corner.x,corner.y,1]);
+			transformed = corners.map(function(vector){
 				return transform.x(vector)
 			});
 		});

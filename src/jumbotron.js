@@ -21,10 +21,10 @@ jumbotron.util.mapToUnit = function(corners) {
 	// 0,0 - 1,0 - 1,1 - 0,1
 
 	// translate, scale & rotate based on first two points
-	var xoff = corners[0].x,
-		yoff = corners[0].y,
-		xdiff = corners[1].x - corners[0].x,
-		ydiff = corners[1].y - corners[0].y, //opp
+	var xoff = corners[0].e(1),
+		yoff = corners[0].e(2),
+		xdiff = corners[1].e(1) - corners[0].e(1),
+		ydiff = corners[1].e(2) - corners[0].e(2), //opp
 		width = Math.sqrt((xdiff*xdiff) + (ydiff*ydiff));
 
 	// what angle we turn it by to line up the first two points
