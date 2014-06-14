@@ -10,6 +10,12 @@ jumbotron.construct = function(){}
 
 jumbotron.util = {};
 
+jumbotron.util.vectors = function(marker){
+	return marker.corners.map(function(c){
+		return $V([c.x, c.y, 1]);
+	})
+}
+
 jumbotron.util.mapToUnit = function(corners) {
 	// find a transform that will convert corners to
 	// 0,0 - 1,0 - 1,1 - 0,1

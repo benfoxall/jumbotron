@@ -39,6 +39,23 @@ describe('recognition', function(){
 
 describe('utils', function(){
 
+	describe('marker vectors', function(){
+		var vectors;
+		before(function(){
+			marker = detections.a[2];
+			vectors = jumbotron.util.vectors(marker);
+		})
+
+		it('gives us a four item array', function(){
+			vectors.length.should.eql(4)
+		})
+
+		it('gives a homogonous matching vector', function(){
+			vectors[0].elements.should.eql([72, 510, 1]);
+		})
+		
+	})
+
 	describe('mapToUnit', function(){
 		var corners = detections.a[2].corners,
 			transform,   // the matrix transform that will be generated
