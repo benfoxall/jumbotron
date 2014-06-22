@@ -1,5 +1,6 @@
 <html>
 <head>
+  <meta charset="utf-8">
   <title></title>
   <style type="text/css">
   .canvasses{
@@ -8,7 +9,7 @@
     /*background: #f08;*/
     white-space: nowrap;
     margin-bottom:-10%;
-    height: 650px
+    height: 430px
   }
   canvas{
     background: #eee;
@@ -25,9 +26,18 @@
   </div>
   <div id="outputDiv" style="white-space:pre"></div>
 
+  <div id="outputVis"></div>
+
+  <canvas width="300" height="300" id="transforms" ></canvas>
+
   <script type="text/javascript" src="../lib/js-aruco/cv.js"></script>
   <script type="text/javascript" src="../lib/js-aruco/svd.js"></script>
   <script type="text/javascript" src="../lib/js-aruco/aruco.js"></script>
+  <script type="text/javascript" src="../lib/d3/d3.min.js"></script>
+
+
+  <script src="../src/jumbotron.js"></script>
+  <script src="../lib/sylvester/sylvester.js"></script>
   
   <script type="text/javascript">
     /* handy getter for image data, might be useful for tests
@@ -46,7 +56,17 @@
 
     }
     */
-    var canvasses = document.querySelectorAll('canvas');
+
+    var vectorGrid = {
+      // ab:[v1,v2],
+      // ac:[v1,v2],
+    };
+
+
+
+
+    var canvasses = document.querySelectorAll('.canvasses > canvas');
+    var outputs = [];
 
     var images = [
       '../test/assets/a.jpg',
@@ -71,6 +91,8 @@
         var output = detector.detect(data);
 
         console.log(output)
+        outputs.push(output);
+        if(outputs.length == images.length) next()
 
         outputDiv.innerHTML += '\n' + path + ': ' + JSON.stringify(output);//, null, 2);
 
@@ -89,6 +111,86 @@
       imageObj.src = path;
 
     })
+
+    function next(){
+
+      // scale for visual of vectors
+      s = 7;
+
+
+      offsets = outputs
+        .map(jumbotron.util.extractOffsets2)
+        .reduce(function(memo, item){
+          Object.keys(item).forEach(function(key){
+            if(!memo[key]) memo[key] = [];
+            memo[key].push(item[key]);
+          })
+          return memo;
+        }, {})
+
+
+      ctx = transforms.getContext('2d');
+      ctx.fillStyle = 'rgba(0,0,255,0.4)';
+      ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+
+
+      var idsObj = {};
+      Object.keys(offsets).forEach(function(k){
+        var i = parseInt(k.split('-')[0], 10);
+        idsObj[i] = true;
+      })
+
+      ids = Object.keys(idsObj).map(function(k){return parseInt(k,10)}).sort();
+
+
+
+
+      ids.forEach(function(x_id, x){
+        x*=50;x+=50;
+        ids.forEach(function(y_id, y){
+          y*=50;y+=50;
+
+          ctx.fillRect(x,y,5,5);
+
+          var vectors = offsets[x_id + '-' + y_id] || [];
+
+          vectors.forEach(function(v){
+            console.log(v);
+            // debugger;
+            ctx.beginPath();
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+(v.e(1)*s),y+(v.e(2)*s))
+            ctx.stroke();
+          })
+        })
+      })
+
+
+      return;
+      offsets.forEach(function(offset, i){
+
+        var y = (i+1) * 50;
+
+        offset.forEach(function(vectors, j){
+
+          var x = (j+1) * 50;
+
+
+          ctx.fillRect(x,y,5,5);
+
+          vectors.forEach(function(v){
+            ctx.beginPath();
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+(v.e(1)*s),y+(v.e(2)*s))
+            ctx.stroke();
+          })
+
+        })
+
+      })
+
+
+    }
 
   </script>
 </body>
