@@ -39,7 +39,7 @@ jumbotron.start();
 
 This should only matter if you are hacking on the internals and fixing stuff (which would be very appreciated).
 
-## recogition approach
+## recognition approach
 
 The marker recognition is performed by [js-aruco](https://github.com/jcmellado/js-aruco).  The [pose estimation](https://github.com/jcmellado/js-aruco#3d-pose-estimation) component requires the physical size of the marker, which we don't have.  Instead, we use the constraint that all markers lie on the same plane to work out their positions relative to each other.
 
