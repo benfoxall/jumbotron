@@ -226,16 +226,17 @@
 
 
       var keys = Object.keys(grid).filter(function(k){
-        return k.indexOf('3-') === 0
+        return k.indexOf('0-') !== 0
       });
 
-      // keys = [keys[0]];
-
-      var source = world.filter(function(item){
-        return item.id == 3;
-      })[0];
-
       keys.forEach(function(k){
+
+        var tkey = parseInt(k.split('-')[0],10);
+        console.log(tkey)
+        var source = world.filter(function(item){
+          return item.id == tkey;
+        })[0];
+
 
         // todo average vector?
         var vectors = grid[k];
@@ -266,7 +267,7 @@
 
         var scale = A.modulus() / B.modulus();
         // debugger;
-        console.log(scale);
+        // console.log(scale);
 
         // console.log(a_source.inspect(), b_source.inspect(), t_vec.inspect())
 
