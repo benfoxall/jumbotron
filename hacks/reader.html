@@ -29,6 +29,7 @@
   <div id="outputVis"></div>
 
   <canvas width="300" height="300" id="transforms" ></canvas>
+  <canvas width="300" height="300" id="world" ></canvas>
 
   <script type="text/javascript" src="../lib/js-aruco/cv.js"></script>
   <script type="text/javascript" src="../lib/js-aruco/svd.js"></script>
@@ -155,7 +156,7 @@
           var vectors = offsets[x_id + '-' + y_id] || [];
 
           vectors.forEach(function(v){
-            console.log(v);
+            // console.log(v);
             // debugger;
             ctx.beginPath();
             ctx.moveTo(x,y);
@@ -163,33 +164,52 @@
             ctx.stroke();
           })
         })
+      });
+
+
+      makeworld();
+
+    }
+
+
+    function makeworld(){
+      positions = magicness(offsets);
+
+      var ctx = world.getContext('2d');
+      ctx.fillStyle = 'rgba(0,0,255,0.4)';
+      ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+      ctx.lineWidth = 0.05;
+
+      ctx.translate(10,10);
+      ctx.scale(30,30);
+
+      positions.forEach(function(marker){
+
+        var p0 = marker.transform.x($V([0,0,1]));
+        var p1 = marker.transform.x($V([1,0,1]));
+        var p2 = marker.transform.x($V([1,1,1]));
+        var p3 = marker.transform.x($V([0,1,1]));
+
+
+        ctx.beginPath();
+        ctx.moveTo(p0.e(1),p0.e(2));
+        ctx.lineTo(p1.e(1),p1.e(2));
+        ctx.lineTo(p2.e(1),p2.e(2));
+        ctx.lineTo(p3.e(1),p3.e(2));
+        ctx.stroke();
+
       })
+    }
 
-
-      return;
-      offsets.forEach(function(offset, i){
-
-        var y = (i+1) * 50;
-
-        offset.forEach(function(vectors, j){
-
-          var x = (j+1) * 50;
-
-
-          ctx.fillRect(x,y,5,5);
-
-          vectors.forEach(function(v){
-            ctx.beginPath();
-            ctx.moveTo(x,y);
-            ctx.lineTo(x+(v.e(1)*s),y+(v.e(2)*s))
-            ctx.stroke();
-          })
-
-        })
-
-      })
-
-
+    function magicness(grid){
+      return [
+        {id:0, transform: Matrix.I(3)},
+        {id:1, transform: $M([
+              [1,     0,   2],
+              [0,     1,   2],
+              [0,     0,     1]])
+      }
+      ]
     }
 
   </script>
