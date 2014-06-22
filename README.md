@@ -41,7 +41,7 @@ This should only matter if you are hacking on the internals and fixing stuff (wh
 
 ## recognition approach
 
-The marker recognition is performed by [js-aruco](https://github.com/jcmellado/js-aruco).  The [pose estimation](https://github.com/jcmellado/js-aruco#3d-pose-estimation) component requires the physical size of the marker, which we don't have.  Instead, we use the constraint that all markers lie on the same plane to work out their positions relative to each other.
+The marker recognition is performed by [js-aruco](https://github.com/jcmellado/js-aruco).  The [pose estimation](https://github.com/jcmellado/js-aruco#3d-pose-estimation) component requires the physical size of the marker, which we don't have.  Instead, we use the constraint that all markers lie on the same plane to work out their positions relative to each other.  Also, by approaching it this way - it allows us to combine several observations cover larger areas and also handle observations with missing markers.
 
 ```js
 // the structure of marker output from js-aruco
