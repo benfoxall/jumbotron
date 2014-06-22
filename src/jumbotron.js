@@ -45,3 +45,77 @@ jumbotron.util.mapToUnit = function(corners) {
 
 	return s.x(r.x(t));
 }
+
+// extract mapings from each marker to another 
+// once they have been transformed to be 1x1
+jumbotron.util.extractOffsets = function(markers){
+	var vectors = markers.map(jumbotron.util.vectors);
+
+	return markers.map(function(marker, i){
+		var v = vectors[i];
+
+		// the transform to make this normal
+		var transform = jumbotron.util.mapToUnit(v);
+
+		// vectors to all markers
+		return markers.map(function(m,j){
+			var vector = vectors[j][0]
+			// debugger;
+			return transform.x(vector)
+		})	
+	})
+}
+
+
+// extract mapings from each marker to another 
+// once they have been transformed to be 1x1
+jumbotron.util.extractOffsets = function(markers){
+	var vectors = markers.map(jumbotron.util.vectors);
+
+	return markers.map(function(marker, i){
+		var v = vectors[i];
+
+		// the transform to make this normal
+		var transform = jumbotron.util.mapToUnit(v);
+
+		// vectors to all markers
+		return markers.map(function(m,j){
+			var vector = vectors[j][0]
+			// debugger;
+			return transform.x(vector)
+		})	
+	})
+}
+
+
+
+// extract mapings from each marker to another 
+// once they have been transformed to be 1x1
+jumbotron.util.extractOffsets2 = function(markers){
+	// debugger;
+
+	var grid = {};
+
+	var vectors = markers.map(jumbotron.util.vectors);
+	var ids     = markers.map(function(m){return m.id});
+
+	markers.map(function(marker, i){
+		var v = vectors[i];
+
+		// the transform to make this normal
+		var transform = jumbotron.util.mapToUnit(v);
+
+		// vectors to all markers
+		return markers.map(function(m,j){
+			var vector = vectors[j][0]
+			// debugger;
+			// return transform.x(vector);
+
+			if(i !== j) 
+				grid[ids[i] + '-' + ids[j]] = transform.x(vector);
+		})	
+	});
+
+
+	return grid;
+}
