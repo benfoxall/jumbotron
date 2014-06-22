@@ -232,7 +232,7 @@
       keys.forEach(function(k){
 
         var tkey = parseInt(k.split('-')[0],10);
-        console.log(tkey)
+        // console.log(tkey)
         var source = world.filter(function(item){
           return item.id == tkey;
         })[0];
@@ -266,6 +266,25 @@
         // A = marker.transform.x(A)
 
         var scale = A.modulus() / B.modulus();
+        var rotation = A.angleFrom(B);
+
+        var xdiff = B.e(1) - A.e(1), 
+            ydiff = B.e(2) - A.e(2);
+
+        var angle = -Math.atan2(ydiff, xdiff);
+
+        var anglea = Math.atan2(A.e(2), A.e(1));
+        var angleb = Math.atan2(B.e(2), B.e(1));
+
+        angleb += Math.PI
+
+        angle = anglea - angleb;
+
+        // angle = angle % (Math.PI*2)
+
+        console.log(k, anglea, angleb, angle)
+
+        // console.log(k, rotation, angle)
         // debugger;
         // console.log(scale);
 
@@ -278,6 +297,10 @@
           [0,     0,     1]])
 
         source.transform = source.transform.x(s)
+
+        var r = Matrix.RotationZ(angle);
+
+        source.transform = source.transform.x(r)
 
 
 
