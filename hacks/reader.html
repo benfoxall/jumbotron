@@ -202,6 +202,102 @@
     }
 
     function magicness(grid){
+      var keys = Object.keys(grid).filter(function(k){
+        return k.indexOf('0-') === 0
+      });
+
+      var world = [{id:0, transform: Matrix.I(3)}];
+
+      keys.forEach(function(k){
+
+        // todo average vector?
+        var vectors = grid[k];
+
+        var item = {
+            id:parseInt(k.split('-')[1],10),
+            transform: $M([
+                [1,     0,   vectors[0].e(1)],
+                [0,     1,   vectors[0].e(2)],
+                [0,     0,   1]])
+        };
+
+        world.push(item)
+      });
+
+
+      var keys = Object.keys(grid).filter(function(k){
+        return k.indexOf('3-') === 0
+      });
+
+      // keys = [keys[0]];
+
+      var source = world.filter(function(item){
+        return item.id == 3;
+      })[0];
+
+      keys.forEach(function(k){
+
+        // todo average vector?
+        var vectors = grid[k];
+        var vector = vectors[0];
+
+        var target = parseInt(k.split('-')[1],10);
+
+        var marker = world.filter(function(item){
+          return item.id == target;
+        })[0];
+
+
+        var a_source = 
+          marker.transform.x($V([0,0,1]))
+
+        var b_source = 
+          source.transform.x($V([0,0,1]))
+
+        var A = $V([b_source.e(1) - a_source.e(1),b_source.e(2) - a_source.e(2),1]);
+        // var B = marker.transform.x(vector);
+
+        var bbase = source.transform.x($V([0,0,1]));
+        var B1 = source.transform.x(vector);
+
+        var B = $V([B1.e(1) - bbase.e(1),B1.e(2) - bbase.e(2),1]);
+
+        // A = marker.transform.x(A)
+
+        var scale = A.modulus() / B.modulus();
+        // debugger;
+        console.log(scale);
+
+        // console.log(a_source.inspect(), b_source.inspect(), t_vec.inspect())
+
+
+        var s = $M([
+          [scale, 0,     0],
+          [0,     scale, 0],
+          [0,     0,     1]])
+
+        source.transform = source.transform.x(s)
+
+
+
+        // var item = {
+        //     id:parseInt(k.split('-')[1],10),
+        //     transform: $M([
+        //         [1,     0,   vectors[0].e(1)],
+        //         [0,     1,   vectors[0].e(2)],
+        //         [0,     0,   1]])
+        // };
+
+        // world.push(item)
+      });
+
+
+
+      console.log(keys)
+      return world;
+
+
+
       return [
         {id:0, transform: Matrix.I(3)},
         {id:1, transform: $M([
