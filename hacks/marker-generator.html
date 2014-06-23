@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>transform debug</title>
+	<meta charset="utf-8">
+	<title>marker generator</title>
 
     <script src="../src/jumbotron.js"></script>
     <script src="../lib/svg.js/dist/svg.js"></script>
@@ -10,9 +11,9 @@
 <body>
 	<h1>marker generator</h1>
 	<input id="number" type="number" value=0>
+
 	<div id="out"></div>
 	
-
 	<script type="text/javascript">
 
 		function generate(){
@@ -23,6 +24,12 @@
 				data = jumbotron.marker.generate(n),
 				draw = SVG('out').size(350, 350);
 
+			// not totally sure what this does
+			draw.fixSubPixelOffset()
+
+			// it would be possible to create this as a single
+			// shape using a path, which would remove the line
+			// artifacts, though we don't have time right now
 			data.forEach(function(row,i){
 				row.forEach(function(item,j){
 					if(item){
@@ -40,6 +47,5 @@
 		number.addEventListener('change', generate)
 
 	</script>
-
 </body>
 </html>
