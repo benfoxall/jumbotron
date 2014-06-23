@@ -103,3 +103,48 @@ function match_point(vector, array, accuracy){
 				 '(± ' + accuracy + ')')
 	}
 }
+
+describe('markers', function(){
+
+	var _ = false, b = true;
+
+	it('generates marker 0', function(){
+		jumbotron.marker.generate(0).should.eql([
+			[b,  b,  b,  b,  b,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  b,  b,  b,  b,  b,  b]
+		])
+	})
+
+	it('generates marker 100', function(){
+		jumbotron.marker.generate(100).should.eql([
+			[b,  b,  b,  b,  b,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  _,  b,  _,  _,  _,  b],
+			[b,  b,  _,  b,  b,  _,  b],
+			[b,  _,  b,  _,  _,  _,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  b,  b,  b,  b,  b,  b]
+		])
+	})
+
+
+
+	it('generates marker 1020', function(){
+		jumbotron.marker.generate(1020).should.eql([
+			[b,  b,  b,  b,  b,  b,  b],
+			[b,  b,  _,  _,  _,  b,  b],
+			[b,  b,  _,  _,  _,  b,  b],
+			[b,  b,  _,  _,  _,  b,  b],
+			[b,  b,  _,  _,  _,  b,  b],
+			[b,  _,  b,  b,  b,  b,  b],
+			[b,  b,  b,  b,  b,  b,  b]
+		])
+	})
+
+
+})

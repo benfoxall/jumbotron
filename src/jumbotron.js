@@ -119,3 +119,32 @@ jumbotron.util.extractOffsets2 = function(markers){
 
 	return grid;
 }
+
+
+jumbotron.marker = {};
+
+jumbotron.marker.generate = function(i){
+
+	var w = false, b = true
+
+	var rows =[
+		[b, w, b, b, b, b, b],
+		[b, w, b, w, w, w, b],
+		[b, b, w, b, b, w, b],
+		[b, b, w, w, w, b, b],
+
+		[b, b, b, b, b, b, b] // border
+	];
+
+
+	return [
+		rows[4],
+		rows[i >> 8 & 3],
+		rows[i >> 6 & 3],
+		rows[i >> 4 & 3],
+		rows[i >> 2 & 3],
+		rows[i & 3],
+		rows[4]
+	]
+}
+
