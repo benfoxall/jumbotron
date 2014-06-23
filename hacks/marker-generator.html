@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>transform debug</title>
+
+    <script src="../src/jumbotron.js"></script>
+    <script src="../lib/svg.js/dist/svg.js"></script>
+
+</head>
+<body>
+	<h1>marker generator</h1>
+	<input id="number" type="number" value=0>
+	<div id="out"></div>
+	
+
+	<script type="text/javascript">
+
+		function generate(){
+
+			out.childNodes[0] && out.childNodes[0].remove();
+
+			var n    = parseInt(number.value,10)
+				data = jumbotron.marker.generate(n),
+				draw = SVG('out').size(350, 350);
+
+			data.forEach(function(row,i){
+				row.forEach(function(item,j){
+					if(item){
+						draw
+							.rect(50, 50)
+							.x(j*50)
+							.y(i*50)
+							.attr({ fill: '#000' })
+					}
+				});
+			});
+		}
+
+		generate();
+		number.addEventListener('change', generate)
+
+	</script>
+
+</body>
+</html>
