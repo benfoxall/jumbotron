@@ -39,6 +39,23 @@ jumbotron.start();
 
 This should only matter if you are hacking on the internals and fixing stuff (which would be very appreciated).
 
+## Setup
+
+Dependencies are managed by [bower](http://bower.io/), install them with:
+
+```bash
+bower install
+```
+
+Then you need to serve the files through a web server. [SimpleHTTPServer](https://docs.python.org/2/library/simplehttpserver.html#module-SimpleHTTPServer) is a pretty easy way to do that
+
+```bash
+python -m SimpleHTTPServer
+```
+
+Then visit [localhost:8000](http://localhost:8000) - most interesting stuff is in the /hacks folder.
+
+
 ## recognition approach
 
 The marker recognition is performed by [js-aruco](https://github.com/jcmellado/js-aruco).  The [pose estimation](https://github.com/jcmellado/js-aruco#3d-pose-estimation) component requires the physical size of the marker, which we don't have.  Instead, we use the constraint that all markers lie on the same plane to work out their positions relative to each other.  Also, by approaching it this way - it allows us to combine several observations cover larger areas and also handle observations with missing markers.
