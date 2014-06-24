@@ -120,7 +120,7 @@
 
 
       offsets = outputs
-        .map(jumbotron.util.extractOffsets2)
+        .map(jumbotron.util.extractOffsets)
         .reduce(function(memo, item){
           Object.keys(item).forEach(function(key){
             if(!memo[key]) memo[key] = [];
