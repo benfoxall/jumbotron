@@ -34,7 +34,6 @@
   <script type="text/javascript" src="../lib/js-aruco/cv.js"></script>
   <script type="text/javascript" src="../lib/js-aruco/svd.js"></script>
   <script type="text/javascript" src="../lib/js-aruco/aruco.js"></script>
-  <script type="text/javascript" src="../lib/d3/d3.min.js"></script>
 
 
   <script src="../src/jumbotron.js"></script>
@@ -174,6 +173,7 @@
 
     function makeworld(){
       positions = magicness(offsets);
+      markerIds = Object.keys(positions);
 
       var ctx = world.getContext('2d');
       ctx.fillStyle = 'rgba(0,0,255,0.4)';
@@ -183,12 +183,13 @@
       ctx.translate(10,10);
       ctx.scale(30,30);
 
-      positions.forEach(function(marker){
+      markerIds.forEach(function(id){
+        var transform = positions[id];
 
-        var p0 = marker.transform.x($V([0,0,1]));
-        var p1 = marker.transform.x($V([1,0,1]));
-        var p2 = marker.transform.x($V([1,1,1]));
-        var p3 = marker.transform.x($V([0,1,1]));
+        var p0 = transform.x($V([0,0,1]));
+        var p1 = transform.x($V([1,0,1]));
+        var p2 = transform.x($V([1,1,1]));
+        var p3 = transform.x($V([0,1,1]));
 
 
         ctx.beginPath();
@@ -206,22 +207,20 @@
         return k.indexOf('0-') === 0
       });
 
-      var world = [{id:0, transform: Matrix.I(3)}];
+      var world = {'0':Matrix.I(3)};
 
       keys.forEach(function(k){
+
+        var tId = k.split('-')[1];
 
         // todo average vector?
         var vectors = grid[k];
 
-        var item = {
-            id:parseInt(k.split('-')[1],10),
-            transform: $M([
-                [1,     0,   vectors[0].e(1)],
-                [0,     1,   vectors[0].e(2)],
-                [0,     0,   1]])
-        };
-
-        world.push(item)
+        world[tId] = $M([
+          [1,     0,   vectors[0].e(1)],
+          [0,     1,   vectors[0].e(2)],
+          [0,     0,   1]])
+        
       });
 
 
@@ -231,11 +230,12 @@
 
       keys.forEach(function(k){
 
+
+        // if the 
+
         var tkey = parseInt(k.split('-')[0],10);
         // console.log(tkey)
-        var source = world.filter(function(item){
-          return item.id == tkey;
-        })[0];
+        var source = world[tkey];
 
 
         // todo average vector?
@@ -244,22 +244,20 @@
 
         var target = parseInt(k.split('-')[1],10);
 
-        var marker = world.filter(function(item){
-          return item.id == target;
-        })[0];
+        var marker = world[target]
 
 
         var a_source = 
-          marker.transform.x($V([0,0,1]))
+          marker.x($V([0,0,1]))
 
         var b_source = 
-          source.transform.x($V([0,0,1]))
+          source.x($V([0,0,1]))
 
         var A = $V([b_source.e(1) - a_source.e(1),b_source.e(2) - a_source.e(2),1]);
         // var B = marker.transform.x(vector);
 
-        var bbase = source.transform.x($V([0,0,1]));
-        var B1 = source.transform.x(vector);
+        var bbase = source.x($V([0,0,1]));
+        var B1 = source.x(vector);
 
         var B = $V([B1.e(1) - bbase.e(1),B1.e(2) - bbase.e(2),1]);
 
@@ -271,7 +269,6 @@
         var xdiff = B.e(1) - A.e(1), 
             ydiff = B.e(2) - A.e(2);
 
-        var angle = -Math.atan2(ydiff, xdiff);
 
         var anglea = Math.atan2(A.e(2), A.e(1));
         var angleb = Math.atan2(B.e(2), B.e(1));
@@ -280,15 +277,7 @@
 
         angle = anglea - angleb;
 
-        // angle = angle % (Math.PI*2)
-
         console.log(k, anglea, angleb, angle)
-
-        // console.log(k, rotation, angle)
-        // debugger;
-        // console.log(scale);
-
-        // console.log(a_source.inspect(), b_source.inspect(), t_vec.inspect())
 
 
         var s = $M([
@@ -296,40 +285,15 @@
           [0,     scale, 0],
           [0,     0,     1]])
 
-        source.transform = source.transform.x(s)
+
+        world[tkey] = source.x(s)
 
         var r = Matrix.RotationZ(angle);
 
-        source.transform = source.transform.x(r)
+        world[tkey] = world[tkey].x(r)
 
-
-
-        // var item = {
-        //     id:parseInt(k.split('-')[1],10),
-        //     transform: $M([
-        //         [1,     0,   vectors[0].e(1)],
-        //         [0,     1,   vectors[0].e(2)],
-        //         [0,     0,   1]])
-        // };
-
-        // world.push(item)
       });
 
-
-
-      console.log(keys)
-      return world;
-
-
-
-      return [
-        {id:0, transform: Matrix.I(3)},
-        {id:1, transform: $M([
-              [1,     0,   2],
-              [0,     1,   2],
-              [0,     0,     1]])
-      }
-      ]
     }
 
   </script>
