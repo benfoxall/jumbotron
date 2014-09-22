@@ -1,3 +1,9 @@
+# NOTE - this is in no way complete
+
+**Currently it gives a few helper functions for interacting with js-aruco output.**
+
+---
+
 # jumbotron
 
 ## libraries
